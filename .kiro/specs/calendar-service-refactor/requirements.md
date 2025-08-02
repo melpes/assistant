@@ -1,3 +1,12 @@
+---
+status: IMPLEMENTED
+completion: 95%
+priority: HIGH
+last_updated: 2025-02-08
+implementation_notes: "캘린더 서비스 모듈화 완료, 테스트 및 문서화 진행 중"
+dependencies: []
+---
+
 # 캘린더 서비스 리팩토링 요구사항
 
 ## 개요

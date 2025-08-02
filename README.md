@@ -110,6 +110,15 @@ result = create_google_calendar_event(
 │   └── legacy/                  # 수동 테스트
 ├── data/                        # 데이터 파일들
 ├── archive/                     # 이전 버전 보관
+├── .kiro/                       # Kiro 설정 및 스펙 관리
+│   ├── specs/                   # 기능 스펙 문서들
+│   │   ├── calendar-service-refactor/     # 캘린더 서비스 리팩토링
+│   │   ├── email-calendar-automation/     # 이메일-캘린더 자동화
+│   │   ├── financial-agent-integration/   # 금융 에이전트 통합
+│   │   ├── financial-transaction-management/ # 금융 거래 관리
+│   │   └── status-template.md   # 스펙 상태 관리 템플릿
+│   ├── steering/                # 에이전트 가이드라인
+│   └── hooks/                   # 자동화 훅 설정
 ├── main.py                      # 진입점
 ├── query.txt                    # 사용자 쿼리
 ├── token.json                   # Google API 토큰
@@ -187,10 +196,44 @@ cp .env.example .env
 3. OAuth 2.0 클라이언트 ID 생성
 4. 생성된 클라이언트 정보를 `.env` 파일에 설정
 
-### 4. 실행
+### 4. 데이터베이스 초기화
+```bash
+python src/database_setup.py
+```
+
+### 5. 실행
 ```bash
 python main.py
 ```
+
+## 문서
+
+- **사용자 가이드**: `docs/user_manual.md` - 시스템 사용 방법
+- **API 문서**: `docs/api_documentation.md` - 개발자용 API 레퍼런스
+- **스펙 관리**: `docs/spec_management.md` - 기능 스펙 관리 가이드
+- **설치 가이드**: `docs/installation_guide.md` - 상세 설치 방법
+
+## 스펙 관리
+
+### 스펙 상태 추적
+
+프로젝트의 기능 개발은 `.kiro/specs/` 디렉토리에서 스펙 문서로 관리됩니다. 각 스펙은 다음과 같은 상태 정보를 포함합니다:
+
+- **status**: 현재 상태 (DRAFT, REVIEW, APPROVED, IMPLEMENTED, ARCHIVED)
+- **completion**: 완료율 (0-100%)
+- **priority**: 우선순위 (HIGH, MEDIUM, LOW)
+- **last_updated**: 마지막 업데이트 날짜
+- **implementation_notes**: 구현 관련 메모
+- **dependencies**: 의존성 스펙 목록
+
+### 현재 스펙 상태
+
+- **캘린더 서비스 리팩토링**: IMPLEMENTED (95% 완료)
+- **금융 에이전트 통합**: IN_PROGRESS (60% 완료)
+- **이메일-캘린더 자동화**: DRAFT (0% 완료)
+- **금융 거래 관리**: IMPLEMENTED (100% 완료)
+
+자세한 스펙 상태 관리 방법은 `.kiro/specs/status-template.md`를 참조하세요.
 
 ## 테스트 실행
 

@@ -4,7 +4,7 @@
   "description": "파일이 생성, 수정, 삭제될 때 관련 문서를 자동으로 찾아서 업데이트하거나 새로운 문서를 생성합니다",
   "version": "1",
   "when": {
-    "type": "fileEdited",
+    "type": "userTriggered",
     "patterns": [
       "src/**/*.py",
       "*.py",

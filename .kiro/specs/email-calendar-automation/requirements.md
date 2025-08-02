@@ -1,4 +1,13 @@
-# 요구사항 문서
+---
+status: DRAFT
+completion: 0%
+priority: HIGH
+last_updated: 2025-02-08
+implementation_notes: "요구사항 정의 완료, 설계 및 구현 대기 중"
+dependencies: ["gmail-api-setup", "calendar-service-refactor"]
+---
+
+# 이메일-캘린더 자동화 요구사항 문서
 
 ## 소개
 

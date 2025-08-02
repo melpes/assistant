@@ -1,10 +1,62 @@
-# 금융 거래 관리 시스템 API 문서
+# 개인 AI 비서 시스템 API 문서
 
 ## 개요
 
-이 문서는 금융 거래 관리 시스템의 API 인터페이스를 설명합니다. 시스템은 LLM 에이전트를 통해 자연어 쿼리를 처리하고, 다양한 도구 함수를 호출하여 금융 데이터를 조회, 분석, 관리합니다.
+이 문서는 개인 AI 비서 시스템의 API 인터페이스를 설명합니다. 시스템은 멀티 에이전트 아키텍처를 통해 자연어 쿼리를 처리하고, 다양한 도구 함수를 호출하여 캘린더 관리, 금융 데이터 조회, 웹 검색 등의 작업을 수행합니다.
+
+## 시스템 아키텍처
+
+### 에이전트 구조
+
+시스템은 다음과 같은 계층 구조로 구성됩니다:
+
+1. **슈퍼바이저 에이전트**: 사용자 쿼리 분석 및 적절한 전문 에이전트로 라우팅
+2. **전문 에이전트들**: 
+   - 일반 에이전트 (캘린더, 웹 검색)
+   - 금융 에이전트 (금융 데이터 관리)
+3. **도구 함수들**: 각 에이전트가 사용하는 구체적인 기능 구현
+
+### 스펙 기반 개발
+
+모든 API는 `.kiro/specs/` 디렉토리의 스펙 문서에 따라 개발되며, 다음과 같은 상태로 관리됩니다:
+
+- **IMPLEMENTED**: 구현 완료된 API
+- **IN_PROGRESS**: 구현 진행 중인 API  
+- **DRAFT**: 계획 단계의 API
 
 ## 에이전트 인터페이스
+
+### 슈퍼바이저 에이전트 (Supervisor Agent)
+
+```python
+def route_query(query: str, context: dict) -> str:
+    """
+    사용자 쿼리를 분석하여 적절한 전문 에이전트로 라우팅합니다.
+    
+    Args:
+        query: 사용자 쿼리
+        context: 사용자 컨텍스트
+        
+    Returns:
+        str: 처리 결과
+    """
+```
+
+### 일반 에이전트 (General Agent)
+
+```python
+def run_general_agent(query: str, context: dict) -> str:
+    """
+    캘린더 관리, 웹 검색 등 일반 작업을 처리하는 에이전트를 실행합니다.
+    
+    Args:
+        query: 사용자 쿼리
+        context: 사용자 컨텍스트
+        
+    Returns:
+        str: 에이전트 응답
+    """
+```
 
 ### 금융 에이전트 (Financial Agent)
 
@@ -22,25 +74,101 @@ def run_financial_agent(query: str, context: dict) -> str:
     """
 ```
 
-### 일반 에이전트 (General Agent)
+## 캘린더 관리 API
+
+### 캘린더 서비스 (IMPLEMENTED - 95% 완료)
+
+#### 일정 조회
 
 ```python
-def run_general_agent(query: str, context: dict) -> str:
+def list_calendar_events(
+    start_time: str = None,
+    end_time: str = None,
+    max_results: int = 10
+) -> str:
     """
-    일반 작업 관련 쿼리를 처리하는 에이전트를 실행합니다.
+    지정된 기간의 캘린더 일정을 조회합니다.
     
     Args:
-        query: 사용자 쿼리
-        context: 사용자 컨텍스트
+        start_time: 시작 시간 (ISO 8601 형식)
+        end_time: 종료 시간 (ISO 8601 형식)
+        max_results: 최대 결과 수
         
     Returns:
-        str: 에이전트 응답
+        str: 일정 목록 (사용자 친화적 형식)
     """
 ```
 
-## 도구 함수 API
+#### 일정 생성
 
-### 거래 조회 도구 (Transaction Tools)
+```python
+def create_google_calendar_event(
+    summary: str,
+    start_time: str,
+    end_time: str,
+    description: str = None,
+    location: str = None,
+    attendees: list = None
+) -> str:
+    """
+    새로운 캘린더 일정을 생성합니다.
+    
+    Args:
+        summary: 일정 제목
+        start_time: 시작 시간 (ISO 8601 형식)
+        end_time: 종료 시간 (ISO 8601 형식)
+        description: 일정 설명
+        location: 장소
+        attendees: 참석자 이메일 목록
+        
+    Returns:
+        str: 생성 결과 메시지
+    """
+```
+
+#### 캘린더 서비스 팩토리
+
+```python
+from src.calendar.factory import CalendarServiceFactory
+
+# 캘린더 서비스 생성
+calendar_service = CalendarServiceFactory.create_service()
+
+# 일정 조회
+events = calendar_service.get_events_for_period(
+    start_date="2024-01-01",
+    end_date="2024-01-31"
+)
+
+# 일정 생성
+new_event = calendar_service.create_new_event(
+    title="중요한 회의",
+    start_time="2024-01-15T14:00:00",
+    end_time="2024-01-15T15:00:00"
+)
+```
+
+## 웹 검색 API
+
+### Tavily 검색 (IMPLEMENTED)
+
+```python
+def search_web(query: str, max_results: int = 5) -> str:
+    """
+    Tavily API를 사용하여 웹 검색을 수행합니다.
+    
+    Args:
+        query: 검색 쿼리
+        max_results: 최대 결과 수
+        
+    Returns:
+        str: 검색 결과 요약
+    """
+```
+
+## 금융 거래 관리 API
+
+### 거래 조회 도구 (Transaction Tools) - IMPLEMENTED (100% 완료)
 
 #### 거래 목록 조회
 
@@ -872,3 +1000,69 @@ def handle_agent_error(error: Exception) -> str:
 ### BackupError
 
 백업 또는 복원 중 발생하는 오류를 나타냅니다.
+
+## 이메일-캘린더 자동화 API (계획 중)
+
+### 상태: DRAFT (0% 완료)
+
+다음 기능들이 계획되어 있습니다:
+
+#### 이메일 처리
+
+```python
+def process_email_for_calendar(email_id: str) -> dict:
+    """
+    이메일 내용을 분석하여 캘린더 일정을 생성합니다.
+    
+    Args:
+        email_id: 처리할 이메일 ID
+        
+    Returns:
+        dict: 생성된 일정 정보
+    """
+```
+
+#### 자동화 규칙 관리
+
+```python
+def add_email_processing_rule(
+    rule_name: str,
+    trigger_condition: str,
+    action_type: str,
+    parameters: dict
+) -> dict:
+    """
+    이메일 처리 자동화 규칙을 추가합니다.
+    
+    Args:
+        rule_name: 규칙 이름
+        trigger_condition: 트리거 조건
+        action_type: 수행할 액션 유형
+        parameters: 액션 매개변수
+        
+    Returns:
+        dict: 추가된 규칙 정보
+    """
+```
+
+자세한 요구사항은 `.kiro/specs/email-calendar-automation/requirements.md`를 참조하세요.
+
+## 스펙 상태 추적
+
+### 현재 구현 상태
+
+- **캘린더 서비스**: IMPLEMENTED (95% 완료)
+- **금융 거래 관리**: IMPLEMENTED (100% 완료)  
+- **금융 에이전트 통합**: IN_PROGRESS (60% 완료)
+- **이메일-캘린더 자동화**: DRAFT (0% 완료)
+
+### 스펙 문서 위치
+
+모든 API 스펙은 `.kiro/specs/` 디렉토리에서 관리됩니다:
+
+- `calendar-service-refactor/`: 캘린더 서비스 관련 스펙
+- `financial-agent-integration/`: 금융 에이전트 통합 스펙
+- `financial-transaction-management/`: 금융 거래 관리 스펙
+- `email-calendar-automation/`: 이메일-캘린더 자동화 스펙
+
+스펙 관리에 대한 자세한 내용은 `docs/spec_management.md`를 참조하세요.

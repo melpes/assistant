@@ -1,3 +1,12 @@
+---
+status: IN_PROGRESS
+completion: 60%
+priority: MEDIUM
+last_updated: 2025-02-08
+implementation_notes: "기본 도구 함수들 구현 완료, 고급 분석 기능 구현 중"
+dependencies: ["financial-transaction-management"]
+---
+
 # 금융 거래 관리 시스템 LLM 에이전트 통합 요구사항
 
 ## 소개
