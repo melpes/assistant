@@ -1,0 +1,41 @@
+# 거래 내역 리포트
+
+**생성일시**: {{generated_at|format_date}}
+
+## 기간 정보
+- **시작일**: {{period.start_date|format_date}}
+- **종료일**: {{period.end_date|format_date}}
+- **기간**: {{period.days}}일
+
+{% if filters %}
+## 적용된 필터
+{% for key, value in filters %}
+- **{{key}}**: {{value}}
+{% endfor %}
+{% endif %}
+
+## 거래 요약
+- **총 거래 건수**: {{summary.transaction_count}}건
+- **총 금액**: {{summary.total_amount}}
+{% if summary.expense_count %}
+- **지출 건수**: {{summary.expense_count}}건 ({{summary.expense_amount}})
+{% endif %}
+{% if summary.income_count %}
+- **수입 건수**: {{summary.income_count}}건 ({{summary.income_amount}})
+{% endif %}
+
+## 거래 목록
+| 날짜 | 설명 | 금액 | 유형 | 카테고리 | 결제 방식 |
+|------|------|------|------|---------|----------|
+{% for tx in transactions %}
+| {{tx.date}} | {{tx.description}} | {{tx.amount}} | {{tx.type}} | {{tx.category}} | {{tx.payment_method}} |
+{% endfor %}
+
+{% if daily_summary %}
+## 일별 거래 요약
+| 날짜 | 건수 | 금액 |
+|------|------|------|
+{% for day in daily_summary %}
+| {{day.date}} | {{day.count}} | {{day.amount}} |
+{% endfor %}
+{% endif %}

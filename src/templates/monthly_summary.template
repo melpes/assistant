@@ -1,0 +1,72 @@
+# 월간 재무 요약 리포트
+
+**생성일시**: {{generated_at|format_date}}
+
+## 기간 정보
+- **연월**: {{period.year_month}}
+- **시작일**: {{period.start_date|format_date}}
+- **종료일**: {{period.end_date|format_date}}
+- **기간**: {{period.days}}일
+
+## 현금 흐름 요약
+- **총 수입**: {{cash_flow_summary.total_income}}
+- **총 지출**: {{cash_flow_summary.total_expense}}
+- **순 흐름**: {{cash_flow_summary.net_flow}} ({{cash_flow_summary.status}})
+{% if cash_flow_summary.income_expense_ratio %}
+- **수입/지출 비율**: {{cash_flow_summary.income_expense_ratio}}
+{% endif %}
+
+## 지출 요약
+- **총 지출**: {{expense_summary.total_expense}}
+- **거래 건수**: {{expense_summary.transaction_count}}건
+- **일평균 지출**: {{expense_summary.daily_average}}
+- **월 예상 지출**: {{expense_summary.monthly_estimate}}
+
+### 주요 지출 카테고리
+| 카테고리 | 금액 | 비율 |
+|---------|------|------|
+{% for item in expense_summary.top_categories %}
+| {{item.category}} | {{item.amount}} | {{item.percentage}}% |
+{% endfor %}
+
+## 수입 요약
+- **총 수입**: {{income_summary.total_income}}
+- **거래 건수**: {{income_summary.transaction_count}}건
+- **일평균 수입**: {{income_summary.daily_average}}
+- **월 예상 수입**: {{income_summary.monthly_estimate}}
+
+### 주요 수입 유형
+| 유형 | 금액 | 비율 |
+|-----|------|------|
+{% for item in income_summary.top_categories %}
+| {{item.category}} | {{item.amount}} | {{item.percentage}}% |
+{% endfor %}
+
+{% if expense_comparison %}
+## 이전 기간 대비 지출 변화
+- **총 지출 변화**: {{expense_comparison.summary.diff}} ({{expense_comparison.summary.diff_percentage}}%)
+- **일평균 지출 변화**: {{expense_comparison.summary.daily_avg_diff}} ({{expense_comparison.summary.daily_avg_diff_percentage}}%)
+
+### 주요 변화 카테고리
+| 카테고리 | 변화 | 변화율 |
+|---------|------|-------|
+{% for item in expense_comparison.top_changes %}
+| {{item.category}} | {{item.diff}} | {{item.diff_percentage}}% |
+{% endfor %}
+{% endif %}
+
+{% if income_comparison %}
+## 이전 기간 대비 수입 변화
+- **총 수입 변화**: {{income_comparison.summary.diff}} ({{income_comparison.summary.diff_percentage}}%)
+- **일평균 수입 변화**: {{income_comparison.summary.daily_avg_diff}} ({{income_comparison.summary.daily_avg_diff_percentage}}%)
+{% endif %}
+
+{% if trends %}
+## 트렌드 요약
+{% if trends.expense_trend %}
+- **지출 트렌드**: {{trends.expense_trend.direction}} (월별 변화율: {{trends.expense_trend.monthly_change_rate}}%)
+{% endif %}
+{% if trends.income_trend %}
+- **수입 트렌드**: {{trends.income_trend.direction}} (월별 변화율: {{trends.income_trend.monthly_change_rate}}%)
+{% endif %}
+{% endif %}
