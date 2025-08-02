@@ -127,6 +127,10 @@ token.json
 *.swp
 *.swo
 
+# Kiro 개인 설정 (필요시 제외)
+# .kiro/hooks/  # 개인적인 훅이 있다면 제외
+# .kiro/specs/  # 진행 중인 개인 스펙이 있다면 제외
+
 # OS 생성 파일
 .DS_Store
 Thumbs.db
